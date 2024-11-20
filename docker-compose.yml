@@ -1,0 +1,17 @@
+version: '3'
+services:
+  backend:
+    build: ./myproject  # Pfad zum Django-Projekt
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./myproject:/app
+    environment:
+      - DEBUG=True
+
+  frontend:
+    build: ./my-solid-app  # Pfad zum Solid.js-Frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
