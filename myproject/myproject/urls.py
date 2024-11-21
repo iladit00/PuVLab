@@ -20,6 +20,19 @@ from myapp.views import hello_world
 from myapp.views import hello
 from .swagger import schema_view
 from myapp.views import get_item_by_name, update_item, delete_item, get_all_items, add_item
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Shopping API",
+        default_version='v1',
+        description="API documentation for Shopping API",
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path('', hello),
@@ -27,6 +40,7 @@ urlpatterns = [
     path('hello/', hello_world),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/json/', schema_view.without_ui(cache_timeout=0), name='schema-json'),  # JSON-Dokumentation
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api/shopping/<str:name>/', get_item_by_name, name='get_item_by_name'),
     path('api/shopping/<str:name>/update', update_item, name='update_item'),
